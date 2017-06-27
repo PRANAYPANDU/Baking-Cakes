@@ -58,7 +58,7 @@ public class Recipe implements Parcelable{
   public String getmRecipeName() {
     return mRecipeName;
   }
-  public List<ArrayList<String>> getmIngredients(){
+  public ArrayList<ArrayList<String>> getmIngredients(){
     return mIngredients;
   }
   public ArrayList<ArrayList<String>> getmSteps(){

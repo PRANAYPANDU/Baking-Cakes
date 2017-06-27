@@ -44,7 +44,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
       @Override
       public void onClick(View v) {
         Intent intent=new Intent(context,RecipeDetailsActivity.class);
-        intent.putExtra("recipe",(android.os.Parcelable)mRecipesData.get(position));
+        intent.putExtra("recipe",mRecipesData.get(position));
         context.startActivity(intent);
       }
     });

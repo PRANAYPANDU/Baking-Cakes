@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     NetworkInfo networkInfo=connMgr.getActiveNetworkInfo();
     if(networkInfo!=null&&networkInfo.isConnected()){
       LoaderManager loaderManager=getLoaderManager();
-
       loaderManager.initLoader(RECIPES_LOADER_ID,null,this);
     }
   }
