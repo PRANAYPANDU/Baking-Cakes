@@ -28,9 +28,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     setContentView(R.layout.activity_main);
 
     mainBinding= DataBindingUtil.setContentView(this,R.layout.activity_main);
-
-    GridLayoutManager gridLayoutManager
-        =new GridLayoutManager(this,1);
+    boolean isTablet = getResources().getBoolean(R.bool.is_tablet);
+    GridLayoutManager gridLayoutManager;
+    if(!isTablet){
+      gridLayoutManager=new GridLayoutManager(this,1);
+    }
+    else{
+          gridLayoutManager=new GridLayoutManager(this,3);
+    }
 
     mainBinding.recipesRecyclerView.setLayoutManager(gridLayoutManager);
     mainBinding.recipesRecyclerView.setHasFixedSize(true);

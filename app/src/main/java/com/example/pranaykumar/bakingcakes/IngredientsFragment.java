@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import com.example.pranaykumar.bakingcakes.databinding.FragmentIngredientsBinding;
 import java.util.ArrayList;
 
@@ -16,15 +17,13 @@ import java.util.ArrayList;
  */
 
 public class IngredientsFragment extends Fragment {
-FragmentIngredientsBinding fragmentIngredientsBinding;
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       Bundle savedInstanceState) {
     View view=inflater.inflate(R.layout.fragment_ingredients,container,false);
-    fragmentIngredientsBinding= DataBindingUtil.setContentView(getActivity(),R.layout.fragment_ingredients);
     Bundle b=getArguments();
-    Recipe currentRecipe=b.getParcelable("recipe");
+    Recipe currentRecipe=b.getParcelable(getString(R.string.Recipe));
     String textViewText="";
     ArrayList<ArrayList<String>> currentIngredients=currentRecipe.getmIngredients();
     int i=0;
@@ -33,7 +32,8 @@ FragmentIngredientsBinding fragmentIngredientsBinding;
       textViewText=textViewText+String.valueOf(i+1)+"."+ingredient.get(2)+":"+ingredient.get(0)+" "+ingredient.get(1)+"\n";
     i++;
     }
-    fragmentIngredientsBinding.ingredientsTextView.setText(textViewText);
+    TextView txtView= (TextView) view.findViewById(R.id.ingredientsTextView);
+    txtView.setText(textViewText);
     return view;
   }
 }

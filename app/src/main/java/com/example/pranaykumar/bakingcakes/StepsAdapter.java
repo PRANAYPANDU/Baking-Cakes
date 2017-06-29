@@ -2,10 +2,12 @@ package com.example.pranaykumar.bakingcakes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +29,7 @@ class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapterViewHol
     this.mListener = mListener;
     mStepsData=arrayLists;
 
+
   }
 
   @Override
@@ -43,10 +46,10 @@ class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapterViewHol
   public void onBindViewHolder(StepsAdapterViewHolder holder, final int position) {
     final ArrayList<String> currentStep=mStepsData.get(position);
     holder.mStepDesc.setText(currentStep.get(0));
-    holder.mLayout.setOnClickListener(new OnClickListener() {
+    holder.mStepDesc.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        mListener.onListStepSelected(position);
+        mListener.onListStepSelected(position,mStepsData);
       }
     });
   }
@@ -56,7 +59,7 @@ class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapterViewHol
     return mStepsData.size();
   }
 
-  public class StepsAdapterViewHolder extends ViewHolder {
+  public class StepsAdapterViewHolder extends ViewHolder{
     public final TextView mStepDesc;
     public final LinearLayout mLayout;
     public StepsAdapterViewHolder(View itemView) {
