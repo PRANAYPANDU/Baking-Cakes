@@ -3,6 +3,7 @@ package com.example.pranaykumar.bakingcakes;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.StateListDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -12,9 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.example.pranaykumar.bakingcakes.DetailsIngredientsFragment.OnStepSelectedInterface;
+import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
@@ -52,6 +57,7 @@ class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapterViewHol
         mListener.onListStepSelected(position,mStepsData);
       }
     });
+
   }
 
   @Override
@@ -60,12 +66,12 @@ class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapterViewHol
   }
 
   public class StepsAdapterViewHolder extends ViewHolder{
-    public final TextView mStepDesc;
-    public final LinearLayout mLayout;
+    @BindView(R.id.step_desc) TextView mStepDesc;
+    @BindView(R.id.stepLayout) LinearLayout mLayout;
+
     public StepsAdapterViewHolder(View itemView) {
       super(itemView);
-      mStepDesc=(TextView)itemView.findViewById(R.id.step_desc);
-      mLayout=(LinearLayout)itemView.findViewById(R.id.stepLayout);
+      ButterKnife.bind(this,itemView);
     }
 
   }

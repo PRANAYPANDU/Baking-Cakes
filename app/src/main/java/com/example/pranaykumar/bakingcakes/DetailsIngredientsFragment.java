@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import java.util.ArrayList;
 
 
@@ -25,6 +28,8 @@ public class DetailsIngredientsFragment extends Fragment {
   View view;
   Bundle b;
 Context context;
+  @BindView(R.id.ingredients) TextView ingredientsTextView;
+  Unbinder unbinder;
   public interface OnStepSelectedInterface{
     void onListStepSelected(int index, ArrayList<ArrayList<String>> mStepsData);
     void onIngredientsSelected(Bundle b);
@@ -35,6 +40,7 @@ Context context;
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
    view=inflater.inflate(R.layout.fragment_details_ingredients,container,false);
+    unbinder=ButterKnife.bind(this,view);
     context=getContext();
     RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.steps_recyclerView);
     b=getArguments();
@@ -57,12 +63,17 @@ Context context;
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     mListener= (OnStepSelectedInterface) getActivity();
-    TextView ingredientsTextView= (TextView)view.findViewById(R.id.ingredients);
     ingredientsTextView.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
         mListener.onIngredientsSelected(b);
       }
     });
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
   }
 }

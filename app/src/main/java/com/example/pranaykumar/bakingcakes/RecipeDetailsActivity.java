@@ -1,11 +1,16 @@
 package com.example.pranaykumar.bakingcakes;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.StateListDrawable;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import com.example.pranaykumar.bakingcakes.Widget.WidgetProvider;
 import java.util.ArrayList;
 
 
@@ -13,6 +18,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     DetailsIngredientsFragment.OnStepSelectedInterface,
     StepVideoDescriptionFragment.OnButtonClickedInterface {
 
+  private static final String PREFS_NAME ="LastVisitedRecipeIngredients";
   private static final String DETAILS_INGREDIENTS_FRAGMENT = "method_fragment";
   public static final String INGREDIENTS_FRAGMENT = "ingredients_fragment";
   private static final String STEPS_VIDEO_DESCRIPTION_FRAGMENT = "steps_video_details_fragment";
@@ -27,6 +33,25 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     Intent intent = getIntent();
     Bundle b;
     b = intent.getExtras();
+    Context context=getApplicationContext();
+    SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, MODE_WORLD_READABLE).edit();
+    Recipe currentRecipe=b.getParcelable(getString(R.string.Recipe));
+    String textViewText="";
+    ArrayList<ArrayList<String>> currentIngredients=currentRecipe.getmIngredients();
+    int i=0;
+    for(ArrayList<String> ingredient:currentIngredients){
+      ingredient=currentIngredients.get(i);
+      textViewText=textViewText+String.valueOf(i+1)+"."+ingredient.get(2)+":"+ingredient.get(0)+" "+ingredient.get(1)+"`";
+      i++;
+    }
+    prefs.putString("Ingredients",textViewText);
+    prefs.putString("LastVisitedRecipeName",currentRecipe.getmRecipeName());
+    prefs.commit();
+    Intent WidgetIntent = new Intent(this,WidgetProvider.class);
+    WidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+    int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), WidgetProvider.class));
+    WidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+    sendBroadcast(WidgetIntent);
     if (!isTablet) {
       if (savedInstanceState == null) {
         DetailsIngredientsFragment detailsIngredientsFragment = new DetailsIngredientsFragment();
@@ -53,6 +78,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
             .commit();
 
       }
+
     }
   }
 

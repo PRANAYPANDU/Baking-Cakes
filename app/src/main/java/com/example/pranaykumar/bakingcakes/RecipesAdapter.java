@@ -10,6 +10,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.util.ArrayList;
 
 
@@ -62,12 +64,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
 
   public class RecipesAdapterViewHolder extends ViewHolder {
 
-    public final TextView mRecipeName;
-    public final LinearLayout mLayout;
+    @BindView(R.id.recipe_name)TextView mRecipeName;
+    @BindView(R.id.layout)LinearLayout mLayout;
     public RecipesAdapterViewHolder(View itemView) {
       super(itemView);
-      mRecipeName=(TextView)itemView.findViewById(R.id.recipe_name);
-      mLayout=(LinearLayout)itemView.findViewById(R.id.layout);
+      ButterKnife.bind(this,itemView);
     }
   }
 }

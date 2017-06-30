@@ -8,7 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.example.pranaykumar.bakingcakes.databinding.FragmentIngredientsBinding;
 import java.util.ArrayList;
 
@@ -17,11 +21,14 @@ import java.util.ArrayList;
  */
 
 public class IngredientsFragment extends Fragment {
+  @BindView(R.id.ingredientsTextView) TextView txtView;
+  Unbinder unbinder;
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       Bundle savedInstanceState) {
     View view=inflater.inflate(R.layout.fragment_ingredients,container,false);
+    unbinder= ButterKnife.bind(this,view);
     Bundle b=getArguments();
     Recipe currentRecipe=b.getParcelable(getString(R.string.Recipe));
     String textViewText="";
@@ -32,8 +39,13 @@ public class IngredientsFragment extends Fragment {
       textViewText=textViewText+String.valueOf(i+1)+"."+ingredient.get(2)+":"+ingredient.get(0)+" "+ingredient.get(1)+"\n";
     i++;
     }
-    TextView txtView= (TextView) view.findViewById(R.id.ingredientsTextView);
     txtView.setText(textViewText);
     return view;
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
   }
 }

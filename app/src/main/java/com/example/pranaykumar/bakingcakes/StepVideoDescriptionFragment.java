@@ -6,13 +6,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Optional;
+import butterknife.Unbinder;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -23,6 +29,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
@@ -37,16 +44,21 @@ public class StepVideoDescriptionFragment extends Fragment {
   }
 
   private StepVideoDescriptionFragment.OnButtonClickedInterface mListener;
-
-  private SimpleExoPlayerView playerView;
+  @BindView(R.id.playerView) SimpleExoPlayerView playerView;
+  @Nullable@BindView(R.id.thumbnail) ImageView thumnailView;
   private SimpleExoPlayer player;
   private long playbackPosition;
   private int currentWindow;
   private boolean playWhenReady = true;
 
   String videoUrl = "";
+  String thumbnailUrl="";
 
-  TextView descTxtView;
+  @Nullable@BindView(R.id.textViewDescription) TextView descTxtView;
+  @Nullable@BindView(R.id.nxt_btn) Button nxtBtn;
+  @Nullable@BindView(R.id.prev_btn) Button preBtn;
+
+  Unbinder unbinder;
 
   @Nullable
   @Override
@@ -54,12 +66,14 @@ public class StepVideoDescriptionFragment extends Fragment {
       @Nullable Bundle savedInstanceState) {
     View view = inflater
         .inflate(R.layout.fragment_step_video_description, container, false);
+    unbinder=ButterKnife.bind(this,view);
     final Bundle bundle = getArguments();
     final int position = bundle.getInt("position");
     ArrayList<String> currentStep = bundle.getStringArrayList(String.valueOf(position));
     videoUrl = currentStep.get(2);
-    playerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
-    if (videoUrl.equals("")) {
+    thumbnailUrl=currentStep.get(3);
+
+    if(TextUtils.isEmpty(videoUrl))  {
       Log.d("O_MY", currentStep.get(0));
       playerView.setVisibility(View.GONE);
     }
@@ -71,14 +85,17 @@ public class StepVideoDescriptionFragment extends Fragment {
       }
       return view;
     } else {
+      if(TextUtils.isEmpty(thumbnailUrl)){
+        thumnailView.setVisibility(View.INVISIBLE);
+      }else{
+        Picasso.with(getContext()).load(currentStep.get(3)).into(thumnailView);
+      }
       mListener = (OnButtonClickedInterface) getActivity();
-      descTxtView = (TextView) view.findViewById(R.id.textViewDescription);
       descTxtView.setText(currentStep.get(1));
       Log.d("O_MY",
           "Position=" + String.valueOf(position) + "Bundle=" + String.valueOf(bundle.size() - 2));
       if (!isTablet) {
-        Button nxtBtn = (Button) view.findViewById(R.id.nxt_btn);
-        Button preBtn = (Button) view.findViewById(R.id.prev_btn);
+
         if (position == (bundle.size() - 2)) {
           nxtBtn.setVisibility(View.GONE);
           Log.d("O_MY", "LastPosition" + String.valueOf(position) + "Bundle=" + String
@@ -106,7 +123,6 @@ public class StepVideoDescriptionFragment extends Fragment {
       if (container != null) {
         container.removeAllViews();
       }
-
       return view;
     }
 
@@ -118,19 +134,17 @@ public class StepVideoDescriptionFragment extends Fragment {
         new DefaultTrackSelector(), new DefaultLoadControl());
 
     playerView.setPlayer(player);
-
     player.setPlayWhenReady(playWhenReady);
     player.seekTo(currentWindow, playbackPosition);
     Uri uri = Uri.parse(videoUrl);
     MediaSource mediaSource = buildMediaSource(uri);
     player.prepare(mediaSource, true, false);
-
   }
 
   private MediaSource buildMediaSource(Uri uri) {
     return new ExtractorMediaSource(uri,
         new DefaultHttpDataSourceFactory(Util.getUserAgent(getActivity()
-            , "BakingApp")),
+            ,"BakingApp")),
         new DefaultExtractorsFactory(), null, null);
   }
 
@@ -175,5 +189,11 @@ public class StepVideoDescriptionFragment extends Fragment {
     if (Util.SDK_INT > 23) {
       releasePlayer();
     }
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
   }
 }

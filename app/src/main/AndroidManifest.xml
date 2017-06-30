@@ -21,6 +21,15 @@
     </activity>
     <activity android:name=".RecipeDetailsActivity">
     </activity>
+    <receiver android:name="com.example.pranaykumar.bakingcakes.Widget.WidgetProvider">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+        android:resource="@xml/widget_info"/>
+    </receiver>
+    <service android:name="com.example.pranaykumar.bakingcakes.Widget.WidgetService"
+      android:permission="android.permission.BIND_REMOTEVIEWS"/>
   </application>
 
 </manifest>

@@ -73,11 +73,13 @@ public class QueryUtils {
           String shortDescription=currentStep.getString("shortDescription");
           String description=currentStep.getString("description");
           String videoUrl=currentStep.getString("videoURL");
+          String thumbnailUrl=currentStep.getString("thumbnailURL");
 
           step.add(0,shortDescription);
 
           step.add(1,description);
           step.add(2,videoUrl);
+          step.add(3,thumbnailUrl);
           Steps.add(step);
         }
         Recipe recipe=new Recipe(id,recipe_name,ingredients,Steps,servings);
