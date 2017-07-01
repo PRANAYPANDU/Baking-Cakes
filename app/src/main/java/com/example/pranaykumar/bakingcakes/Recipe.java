@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by PRANAYKUMAR on 24-06-2017.

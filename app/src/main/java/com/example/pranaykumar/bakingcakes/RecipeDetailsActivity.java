@@ -1,5 +1,6 @@
 package com.example.pranaykumar.bakingcakes;
 
+import android.annotation.SuppressLint;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -34,7 +35,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     Bundle b;
     b = intent.getExtras();
     Context context=getApplicationContext();
-    SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, MODE_WORLD_READABLE).edit();
+    SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME,Context.MODE_PRIVATE).edit();
     Recipe currentRecipe=b.getParcelable(getString(R.string.Recipe));
     String textViewText="";
     ArrayList<ArrayList<String>> currentIngredients=currentRecipe.getmIngredients();
@@ -45,7 +46,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
       i++;
     }
     prefs.putString("Ingredients",textViewText);
-    prefs.putString("LastVisitedRecipeName",currentRecipe.getmRecipeName());
+    prefs.putString("LastVisitedRecipeName","Last Visited Recipe: "+currentRecipe.getmRecipeName());
     prefs.commit();
     Intent WidgetIntent = new Intent(this,WidgetProvider.class);
     WidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");

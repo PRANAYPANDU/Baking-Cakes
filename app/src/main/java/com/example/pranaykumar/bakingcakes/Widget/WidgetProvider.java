@@ -37,7 +37,7 @@ public class WidgetProvider extends AppWidgetProvider {
       );
       remoteViews.setOnClickPendingIntent(R.id.frameLayout, pendingIntent);
       SharedPreferences prefs = context.getSharedPreferences(WidgetAdapter.PREFS_NAME,0);
-      remoteViews.setTextViewText(R.id.recipeLastVisited,prefs.getString("LastVisitedRecipeName","Nutella Pie"));
+      remoteViews.setTextViewText(R.id.recipeLastVisited,prefs.getString("LastVisitedRecipeName","Last Visited Recipe: Nutella Pie"));
       appWidgetManager.updateAppWidget(widgetId, remoteViews);
     }
   }
